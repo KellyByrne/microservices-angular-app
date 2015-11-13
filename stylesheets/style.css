@@ -1,1 +1,12 @@
-style.css
+.input {
+	margin-bottom: 50px;
+}
+
+textarea {
+	width: 500px;
+	height: 150px;
+}
+
+.year-data {
+	margin-top: 50px;
+}
