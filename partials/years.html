@@ -3,10 +3,10 @@
 	<div class="row year-data">
 		<div class="col-md-8">
 		<div ng-repeat= "memory in yearData">
-			<p><strong>When I was a kid... </strong>{{memory.old_days}}</p>
-			<p><strong>but now... </strong>{{memory.these_days}}</p>
+			<p><strong>When I was a kid... </strong>{{memory.attributes.old_days}}</p>
+			<p><strong>but now... </strong>{{memory.attributes.these_days}}</p>
 				<ul>
-					<li>{{memory.year}}</li>
+					<li>{{memory.attributes.year}}</li>
 				</ul>
 			</div>
 			</div>

@@ -17,11 +17,11 @@
 	</div>
 <div class="row" ng-repeat="memory in memoriesData">
 	<div class="col-md-6">
-		<p><strong>When I was a kid...</strong>{{memory.old_days}}
-		<strong>but now...</strong><p>{{memory.these_days}}</p>
+		<p><strong>When I was a kid...</strong>{{memory.attributes.old_days}}
+		<strong>but now...</strong><p>{{memory.attributes.these_days}}</p>
 	</div>
 	<div class="col-md-3">
-		<a href='/years/{{memory.year}}'>{{memory.year}}</a>
+		<a href='/years/{{memory.attributes.year}}'>{{memory.attributes.year}}</a>
 	</div>
 </div>
 </div>

@@ -1,49 +1,55 @@
 var app = angular.module('microservice', ['ngRoute']);
 
-app.controller('HomeController', function($scope, $http){
+app.controller('HomeController', ['$scope', '$http', '$rootScope', function($scope, $http, $rootScope){
 
-	getData = function(){
-	$http.get('http://g12-kelly-byrne-memories.cfapps.io/api/v1/memories').then(function(response){
-		$scope.memoriesData = response.data.rows;
-		})
-	};
+	$http.get('http://galvanize-service-registry.cfapps.io/api/v1/cohorts/g12/kids-these-days?guarantee=http://g12-kelly-byrne-memories.cfapps.io').then(function(response){
+  	$rootScope.url = response.data.data[0].attributes.url;
+  	return $rootScope.url;
+	}).then(function(url){
+			var api = url + '/api/v1/memories';
+		getData = function(){
+			$http.get(api).then(function(response){
+				$scope.memoriesData = response.data.data;
+			})
+		};
 
-	getData();
+			getData();
 	
+		$scope.addMemory = function(){
+			$http.post(api,
+					{
+	  	"data": {
+	    "type": "memory",
+	    "attributes": {
+	      "old_days": $scope.old_days,
+	      "these_days": $scope.these_days,
+	      "year": $scope.year
+	    }
+	  }
+	}).then(function(){
+			$scope.old_days = '';
+			$scope.these_days = '';
+			$scope.year = '';
 
-	$scope.addMemory = function(){
-		$http.post('http://g12-kelly-byrne-memories.cfapps.io/api/v1/memories', 
-				{
-  	"data": {
-    "type": "memory",
-    "attributes": {
-      "old_days": $scope.old_days,
-      "these_days": $scope.these_days,
-      "year": $scope.year
-    }
-  }
-}).then(function(){
-	$scope.old_days = '';
-		$scope.these_days = '';
-		$scope.year = '';
-
-		getData();
+			getData();
 })
 	}
-})
-
-app.controller('YearsController', function($scope, $http, $location){
-	$scope.year = $location.url().split('/')[2]
-	$http.get('http://g12-kelly-byrne-memories.cfapps.io/api/v1/memories/' + $scope.year).then(function(response){
-		$scope.yearData = response.data.rows;
-		$scope.year = response.data.rows[0].year;
 	})
 
-	$http.get('http://g12-kelly-byrne-memories.cfapps.io/api/v1/memories/years').then(function(response){
-		$scope.allYears = response.data
+
+}])
+
+app.controller('YearsController', ['$scope', '$http', '$rootScope', '$location', function($scope, $http, $rootScope, $location){
+	$scope.year = $location.url().split('/')[2];
+	$http.get($rootScope.url + '/api/v1/memories/' + $scope.year).then(function(response){
+		$scope.yearData = response.data.data
 	})
 
-})
+	$http.get($rootScope.url + '/api/v1/memories/years').then(function(response){
+		$scope.allYears = response.data.data;
+	})
+
+}])
 
 app.config(function($routeProvider, $locationProvider){
 	$routeProvider
